@@ -960,8 +960,6 @@ def admin_donations():
     )
 
 
-
-
 @app.route("/admin/donations/<int:donation_id>/approve", methods=["POST"])
 def approve_donation(donation_id):
 
