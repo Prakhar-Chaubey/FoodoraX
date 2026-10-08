@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Donate Food | FoodoraX</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="donation-card">
+
+        <a href="/" class="auth-logo">
+            🍃 Foodora<span>X</span>
+        </a>
+
+        <div class="auth-heading">
+
+            <span class="section-tag">MAKE AN IMPACT</span>
+
+            <h1>Share Surplus Food</h1>
+
+            <p>
+                Your extra food can become someone's next meal.
+            </p>
+
+        </div>
+
+        {% for message in get_flashed_messages() %}
+            <div class="auth-message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <label>Food Item Name *</label>
+
+            <input
+                type="text"
+                name="food_name"
+                placeholder="Example: Fresh Vegetable Biryani"
+                maxlength="100"
+                required
+            >
+
+            <label>Food Category *</label>
+
+            <select name="category" required>
+                <option value="">Select food category</option>
+                <option value="Cooked Meals">Cooked Meals</option>
+                <option value="Bakery">Bakery</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Packaged Food">Packaged Food</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <div class="form-row">
+
+                <div>
+                    <label>Quantity *</label>
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        min="1"
+                        placeholder="Example: 50"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label>Unit *</label>
+
+                    <select name="unit" required>
+                        <option value="">Select unit</option>
+                        <option value="Meals">Meals</option>
+                        <option value="Plates">Plates</option>
+                        <option value="Kg">Kg</option>
+                        <option value="Packets">Packets</option>
+                        <option value="Boxes">Boxes</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <label>Best Before Date & Time *</label>
+
+            <input
+                type="datetime-local"
+                name="expiry"
+                required
+            >
+
+            <label>Pickup Location *</label>
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Enter complete pickup address"
+                maxlength="200"
+                required
+            >
+
+            <label>Additional Description</label>
+
+            <textarea
+                name="description"
+                rows="4"
+                maxlength="500"
+                placeholder="Mention preparation time, storage conditions, allergens or other important details..."
+            ></textarea>
+
+            
+<div class="form-group">
+    <label for="food_image">
+        Food Image <span>(Optional)</span>
+    </label>
+
+    <input
+        type="file"
+        id="food_image"
+        name="food_image"
+        accept=".jpg,.jpeg,.png,.webp"
+    >
+
+    <small>
+        Upload a food photo if available. This field is optional.
+        Supported formats: JPG, PNG, WEBP.
+    </small>
+</div>
+
+            <div class="food-safety-note">
+                <strong>Food Safety Reminder</strong>
+
+                <p>
+                    Only list food that has been safely handled
+                    and is suitable for consumption. Clearly
+                    disclose allergens and storage conditions.
+                </p>
+            </div>
+
+            <button type="submit" class="auth-submit">
+                Publish Food Listing →
+            </button>
+
+        </form>
+
+        <a href="/dashboard" class="back-home">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

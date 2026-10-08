@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | FoodoraX</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-card">
+
+        <a href="/" class="auth-logo">
+            🍃 Foodora<span>X</span>
+        </a>
+
+        <div class="auth-heading">
+            <span class="section-tag">JOIN THE MOVEMENT</span>
+            <h1>Create Account</h1>
+            <p>Be a part of turning surplus into smiles.</p>
+        </div>
+
+        {% for message in get_flashed_messages() %}
+            <div class="auth-message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" action="/register">
+
+            <label>Full Name</label>
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your full name"
+                required
+            >
+
+            <label>Email Address</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Organization Name</label>
+            <input
+                type="text"
+                name="organization"
+                placeholder="Restaurant, NGO, College..."
+            >
+
+            <label>Choose Account Type</label>
+
+            <select name="role" required>
+                <option value="">Select account type</option>
+                <option value="donor">Food Donor</option>
+                <option value="recipient">NGO / Recipient</option>
+            </select>
+
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Create a password"
+                minlength="6"
+                required
+            >
+
+            <button type="submit" class="auth-submit">
+                Create My Account →
+            </button>
+
+        </form>
+
+        <p class="auth-switch">
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+
+        <a href="/" class="back-home">← Back to Home</a>
+
+    </div>
+
+</body>
+</html>

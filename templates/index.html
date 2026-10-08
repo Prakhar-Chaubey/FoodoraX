@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodoraX | Turning Surplus into Smiles</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    
+<header class="navbar">
+
+    <a href="/" class="logo">
+        <span class="logo-icon">🍃</span>
+        Foodora<span class="logo-x">X</span>
+    </a>
+
+    
+<nav class="nav-links">
+
+    <a href="/">Home</a>
+
+    <a href="/#how-it-works">How It Works</a>
+
+    {% if user %}
+        <a href="/food-listings">Food Listings</a>
+    {% endif %}
+
+    <a href="/#impact">Our Impact</a>
+
+</nav>
+
+
+<div class="nav-actions">
+
+    {% if user %}
+
+        <a href="/dashboard" class="login-btn">
+            Hi, {{ user['name'] }} 👋
+        </a>
+
+        <a href="{{ url_for('notifications') }}" class="notification-bell" aria-label="Notifications">
+
+    🔔
+
+    {% if unread_notifications > 0 %}
+        <span class="notification-dot"></span>
+    {% endif %}
+
+</a>
+
+        {% if user['role'] == 'donor' %}
+
+            <a href="/donate" class="signup-btn">
+                + Donate Food
+            </a>
+
+        {% else %}
+
+
+
+        {% endif %}
+
+        <a href="/logout" class="login-btn">
+            Logout
+        </a>
+
+    {% else %}
+
+        <a href="/login" class="login-btn">
+            Login
+        </a>
+
+        <a href="/register" class="signup-btn">
+            Get Started ↗
+        </a>
+
+    {% endif %}
+
+</div>
+
+</header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span class="status-dot"></span>
+                FOOD RESCUE, REIMAGINED
+            </div>
+
+            <h1>
+                Good Food Deserves
+                <span>Another Chance.</span>
+            </h1>
+
+            <p class="hero-description">
+                Connecting surplus food from restaurants, hostels,
+                college canteens and events with communities that
+                need it. Together, let's make every meal count.
+            </p>
+
+            
+{% if session.get('user_id') %}
+
+    {% if session.get('role') == 'donor' %}
+        <a href="/donate" class="primary-btn">
+            Start Sharing Food →
+        </a>
+    {% else %}
+        <a href="/food-listings" class="primary-btn">
+            Explore Food →
+        </a>
+    {% endif %}
+
+{% else %}
+    <a href="/register" class="primary-btn">
+        Start Sharing Food →
+    </a>
+{% endif %}
+
+            <div class="hero-points">
+                <span>✓ Reduce Food Waste</span>
+                <span>✓ Support Communities</span>
+            </div>
+
+        </div>
+
+
+        <!-- Hero Visual -->
+        <div class="hero-visual">
+
+            <div class="visual-circle"></div>
+
+            <div class="food-illustration">
+                <span class="food-emoji">🥗</span>
+
+                <h3>Share More.</h3>
+                <p>Waste Less.</p>
+
+                <div class="food-decoration">✦</div>
+            </div>
+
+            <div class="floating-card floating-one">
+                <span class="floating-icon">♻</span>
+                <div>
+                    <strong>Food Rescue</strong>
+                    <small>Every meal matters</small>
+                </div>
+            </div>
+
+            <div class="floating-card floating-two">
+                <span class="floating-icon orange-icon">♥</span>
+                <div>
+                    <strong>Community First</strong>
+                    <small>Sharing creates impact</small>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Statistics -->
+    <section class="statistics" id="impact">
+
+        <div class="stat-item">
+            <h2>01</h2>
+            <p>Shared Purpose</p>
+        </div>
+
+        <div class="stat-item">
+            <h2>24/7</h2>
+            <p>Digital Connection</p>
+        </div>
+
+        <div class="stat-item">
+            <h2>∞</h2>
+            <p>Possibilities to Help</p>
+        </div>
+
+        <div class="stat-item">
+            <h2>100%</h2>
+            <p>Community Focus</p>
+        </div>
+
+    </section>
+
+
+    <!-- How It Works -->
+    <section class="how-section" id="how-it-works">
+
+        <div class="section-heading">
+            <span class="section-tag">SIMPLE. SMART. SOCIAL.</span>
+
+            <h2>
+                How FoodoraX
+                <span>Works</span>
+            </h2>
+
+            <p>
+                Three simple steps to turn surplus food into
+                meaningful community impact.
+            </p>
+        </div>
+
+
+        <div class="steps-container">
+
+            <div class="step-card">
+                <div class="step-icon green-bg">🍱</div>
+                <span class="step-number">01</span>
+
+                <h3>List Surplus Food</h3>
+
+                <p>
+                    Restaurants, hostels and event organizers
+                    share their available surplus food details.
+                </p>
+            </div>
+
+
+            <div class="step-card">
+                <div class="step-icon orange-bg">🤝</div>
+                <span class="step-number">02</span>
+
+                <h3>Connect with Recipients</h3>
+
+                <p>
+                    NGOs and recipient organizations discover
+                    available food and coordinate collection.
+                </p>
+            </div>
+
+
+            <div class="step-card">
+                <div class="step-icon green-bg">💚</div>
+                <span class="step-number">03</span>
+
+                <h3>Complete the Handoff</h3>
+
+                <p>
+                    Food is collected with appropriate handling
+                    and the platform tracks the listing status.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Call To Action -->
+    <section class="cta-section">
+
+        <div>
+            <span class="section-tag cta-tag">BE PART OF THE CHANGE</span>
+
+            <h2>One Share Can Make a Difference.</h2>
+
+            <p>
+                Join FoodoraX and help build a community
+                where good food finds a meaningful destination.
+            </p>
+        </div>
+
+        <a href="/register" class="cta-button">
+            Join FoodoraX →
+        </a>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <div class="footer-brand">
+            <a href="/" class="logo">
+                🍃 Foodora<span class="logo-x">X</span>
+            </a>
+
+            <p>Turning Surplus into Smiles.</p>
+        </div>
+
+        <div class="footer-copy">
+            © 2026 FoodoraX. Built for a better tomorrow.
+        </div>
+
+    </footer>
+
+</body>
+</html>

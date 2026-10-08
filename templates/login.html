@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | FoodoraX</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-card">
+
+        <a href="/" class="auth-logo">
+            🍃 Foodora<span>X</span>
+        </a>
+
+        <div class="auth-heading">
+            <span class="section-tag">WELCOME BACK</span>
+            <h1>Login to FoodoraX</h1>
+            <p>Continue making a difference in your community.</p>
+        </div>
+
+        {% for message in get_flashed_messages() %}
+            <div class="auth-message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" action="/login">
+
+            <label>Email Address</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your registered email"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit" class="auth-submit">
+                Login to Account →
+            </button>
+
+        </form>
+
+        <p class="auth-switch">
+            Don't have an account?
+            <a href="/register">Create Account</a>
+        </p>
+
+        <a href="/" class="back-home">← Back to Home</a>
+
+    </div>
+
+</body>
+</html>

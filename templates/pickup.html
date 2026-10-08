@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodoraX | Pickup Details</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="listings-page">
+
+<header class="listings-navbar">
+    <a href="/" class="auth-logo">🍃 Foodora<span>X</span></a>
+
+    <nav class="listings-nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/food-listings">Food Listings</a>
+        <a href="/history">History</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<main class="pickup-container">
+
+    <section class="pickup-card">
+
+        <div class="pickup-icon">📦</div>
+
+        <span class="section-tag">FOOD COLLECTION</span>
+
+        <h1>Pickup Coordination</h1>
+
+        <p class="pickup-subtitle">
+            Coordinate the food collection and help ensure that
+            surplus food reaches the right people.
+        </p>
+
+        <div class="pickup-food-details">
+
+            <h2>{{ donation['food_name'] }}</h2>
+
+            <p>
+                <strong>Category:</strong>
+                {{ donation['category'] }}
+            </p>
+
+            <p>
+                <strong>Quantity:</strong>
+                {{ donation['quantity'] }} {{ donation['unit'] }}
+            </p>
+
+            <p>
+                <strong>Pickup Location:</strong>
+                {{ donation['location'] }}
+            </p>
+
+            <p>
+                <strong>Expiry:</strong>
+                {{ donation['expiry'] }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+
+                {% if donation['status'] == 'Completed' %}
+                    <span style="color: #16a34a; font-weight: bold;">
+                        ✓ Completed
+                    </span>
+                {% else %}
+                    {{ donation['status'] }}
+                {% endif %}
+            </p>
+
+        </div>
+
+        {% if user['role'] == 'donor' %}
+
+            <form method="POST" class="pickup-form">
+
+                <label for="pickup_instructions">
+                    Pickup Instructions
+                </label>
+
+                <textarea
+                    id="pickup_instructions"
+                    name="pickup_instructions"
+                    rows="5"
+                    placeholder="Enter pickup timing, contact instructions, or collection details..."
+                    {% if donation['status'] == 'Completed' %}disabled{% endif %}
+                >{{ donation['pickup_instructions'] or '' }}</textarea>
+
+                {% if donation['status'] != 'Completed' %}
+                    <button type="submit" class="claim-btn">
+                        Save Pickup Instructions
+                    </button>
+                {% else %}
+                    <p style="color: #16a34a; font-weight: bold;">
+                        ✓ This donation has been completed.
+                    </p>
+                {% endif %}
+
+            </form>
+
+        {% else %}
+
+            <div class="pickup-instructions-box">
+
+                <h3>📍 Donor's Pickup Instructions</h3>
+
+                {% if donation['pickup_instructions'] %}
+                    <p>{{ donation['pickup_instructions'] }}</p>
+                {% else %}
+                    <p>
+                        The donor has not added pickup instructions yet.
+                        Please check again later.
+                    </p>
+                {% endif %}
+
+            </div>
+
+            {% if donation['status'] == 'Claimed' %}
+
+                <div class="pickup-completion-box"
+                     style="margin-top: 24px; padding: 20px; border-radius: 14px; background: #e8f5e9;">
+
+                    <h3 style="color: #166534;">
+                        🎉 Did you collect the food?
+                    </h3>
+
+                    <p>
+                        Once you have successfully collected the food,
+                        confirm the pickup below.
+                    </p>
+
+                    <form method="POST"
+                          onsubmit="return confirm('Are you sure you have collected this food and want to complete the donation?');">
+
+                        <input type="hidden" name="action" value="complete">
+
+                        <button type="submit" class="claim-btn">
+                            ✓ Mark as Picked Up
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% elif donation['status'] == 'Completed' %}
+
+                <div style="margin-top: 24px; padding: 20px; border-radius: 14px; background: #e8f5e9; text-align: center;">
+
+                    <h3 style="color: #166534;">
+                        ✓ Pickup Completed Successfully!
+                    </h3>
+
+                    <p>
+                        Thank you for helping reduce food waste
+                        and turning surplus into smiles. 💚
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        {% endif %}
+
+        <a href="/dashboard" class="back-home">
+            ← Back to Dashboard
+        </a>
+
+    </section>
+
+</main>
+
+</body>
+</html>

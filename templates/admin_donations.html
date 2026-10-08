@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Donation Management | FoodoraX</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #E8F5E9;
+            color: #1F2937;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .header {
+            background: #0F5132;
+            color: white;
+            padding: 25px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #D1FAE5;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .back-btn {
+            background: white;
+            color: #0F5132;
+        }
+
+        .back-btn:hover {
+            background: #DCFCE7;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid #22C55E;
+        }
+
+        .stat-card h3 {
+            color: #64748B;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            color: #0F5132;
+        }
+
+        .pending-card {
+            border-left-color: #F59E0B;
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .table-section h2 {
+            margin-bottom: 18px;
+            color: #0F5132;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1450px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #F0FDF4;
+            color: #0F5132;
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background: #F9FAFB;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .available {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .claimed {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .completed {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .expired {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .other {
+            background: #F3F4F6;
+            color: #374151;
+        }
+
+        .action-box {
+            min-width: 210px;
+        }
+
+        .action-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .reason-input {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #D1D5DB;
+            border-radius: 7px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .reason-input:focus {
+            border-color: #0F5132;
+            box-shadow: 0 0 0 2px rgba(34,197,94,0.15);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 7px;
+        }
+
+        .approve-btn {
+            background: #0F5132;
+            color: white;
+            flex: 1;
+        }
+
+        .approve-btn:hover {
+            background: #22C55E;
+            color: #0F5132;
+        }
+
+        .reject-btn {
+            background: #DC2626;
+            color: white;
+            flex: 1;
+        }
+
+        .reject-btn:hover {
+            background: #991B1B;
+        }
+
+        .reviewed {
+            color: #64748B;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .reason-text {
+            color: #991B1B;
+            font-size: 12px;
+            margin-top: 5px;
+            max-width: 180px;
+            overflow-wrap: anywhere;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #64748B;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .table-section {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>Donation Management</h1>
+            <p>Review, approve and manage all FoodoraX food donations.</p>
+        </div>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn back-btn">
+            ← Admin Dashboard
+        </a>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h3>Total Donations</h3>
+            <h2>{{ total_donations }}</h2>
+        </div>
+
+        <div class="stat-card pending-card">
+            <h3>Pending Approval</h3>
+            <h2>{{ pending }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Available</h3>
+            <h2>{{ available }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Claimed</h3>
+            <h2>{{ claimed }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Completed</h3>
+            <h2>{{ completed }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Expired</h3>
+            <h2>{{ expired }}</h2>
+        </div>
+
+    </div>
+
+    <div class="table-section">
+
+        <h2>All Food Donations</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Food Name</th>
+                        <th>Category</th>
+                        <th>Donor</th>
+                        <th>Recipient</th>
+                        <th>Quantity</th>
+                        <th>Expiry</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for donation in donations %}
+
+                    <tr>
+
+                        <td>#{{ donation.id }}</td>
+
+                        <td>
+                            <strong>{{ donation.food_name }}</strong>
+                        </td>
+
+                        <td>{{ donation.category }}</td>
+
+                        <td>{{ donation.donor_name }}</td>
+
+                        <td>
+                            {{ donation.recipient_name or "Not Claimed" }}
+                        </td>
+
+                        <td>
+                            {{ donation.quantity }} {{ donation.unit }}
+                        </td>
+
+                        <td>{{ donation.expiry }}</td>
+
+                        <td>{{ donation.location }}</td>
+
+                        <td>
+
+                            {% set status = donation.status|lower %}
+
+                            <span class="status
+                                {% if status == 'available' %}available
+                                {% elif status == 'pending' %}pending
+                                {% elif status == 'claimed' %}claimed
+                                {% elif status == 'completed' %}completed
+                                {% elif status == 'expired' %}expired
+                                {% elif status == 'rejected' %}rejected
+                                {% else %}other{% endif %}">
+
+                                {% if status == 'pending' %}
+                                    Pending Approval
+                                {% else %}
+                                    {{ donation.status }}
+                                {% endif %}
+
+                            </span>
+
+                            {% if status == 'rejected' and donation.rejection_reason %}
+                                <div class="reason-text">
+                                    Reason: {{ donation.rejection_reason }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                        <td>{{ donation.created_at }}</td>
+
+                        <td class="action-box">
+
+                            {% if status == 'pending' %}
+
+                                <form
+                                    class="action-form"
+                                    method="POST"
+                                    action="{{ url_for('approve_donation', donation_id=donation.id) }}"
+                                    onsubmit="return confirm('Are you sure you want to approve this donation?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn approve-btn"
+                                    >
+                                        ✓ Approve
+                                    </button>
+
+                                </form>
+
+                                <form
+                                    class="action-form"
+                                    method="POST"
+                                    action="{{ url_for('reject_donation', donation_id=donation.id) }}"
+                                    onsubmit="return confirm('Are you sure you want to reject this donation?');"
+                                >
+
+                                    <input
+                                        type="text"
+                                        name="reason"
+                                        class="reason-input"
+                                        placeholder="Enter rejection reason"
+                                        maxlength="300"
+                                        required
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn reject-btn"
+                                    >
+                                        ✕ Reject
+                                    </button>
+
+                                </form>
+
+                            {% else %}
+
+                                <span class="reviewed">
+                                    No action required
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="11" class="empty">
+                            No donations found yet.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

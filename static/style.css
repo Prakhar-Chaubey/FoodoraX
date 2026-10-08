@@ -1,0 +1,3060 @@
+
+/* =================================
+   FOODORAX - BRAND COLOR SYSTEM
+================================= */
+
+:root {
+    --primary: #0F5132;
+    --accent: #22C55E;
+    --orange: #FF8A3D;
+    --dark: #1F2937;
+    --light: #E8F5E9;
+
+    --white: #FFFFFF;
+    --muted: #718078;
+    --border: #E2ECE5;
+    --background: #F8FBF8;
+}
+
+
+/* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--dark);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =================================
+   NAVBAR
+================================= */
+
+.navbar {
+    width: 100%;
+    min-height: 78px;
+    padding: 0 7%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -1px;
+}
+
+.logo-x {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.login-btn {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.signup-btn {
+    background: var(--primary);
+    color: var(--white);
+    padding: 12px 19px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.signup-btn:hover,
+.primary-btn:hover {
+    background: var(--accent);
+    color: var(--dark);
+    transform: translateY(-2px);
+}
+
+
+/* =================================
+   HERO SECTION
+================================= */
+
+.hero {
+    max-width: 1350px;
+    margin: auto;
+
+    padding: 85px 7% 75px;
+
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 45px;
+
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 10px 15px;
+    border-radius: 30px;
+
+    background: var(--light);
+    color: var(--primary);
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+.hero h1 {
+    margin-top: 25px;
+
+    font-size: clamp(43px, 5.3vw, 70px);
+    line-height: 1.08;
+    letter-spacing: -3px;
+
+    color: var(--dark);
+}
+
+.hero h1 span {
+    display: block;
+    color: var(--primary);
+}
+
+.hero-description {
+    max-width: 540px;
+    margin-top: 23px;
+
+    font-size: 15px;
+    line-height: 1.9;
+
+    color: var(--muted);
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.primary-btn,
+.secondary-btn {
+    padding: 15px 21px;
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    transition: 0.3s;
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.secondary-btn {
+    background: var(--white);
+    color: var(--primary);
+    border: 1px solid var(--border);
+}
+
+.secondary-btn:hover {
+    border-color: var(--accent);
+    background: var(--light);
+}
+
+.hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+
+    margin-top: 27px;
+
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+
+/* =================================
+   HERO VISUAL
+================================= */
+
+.hero-visual {
+    min-height: 390px;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(
+        circle,
+        #D5F2DE 0%,
+        #EDF8EF 48%,
+        transparent 73%
+    );
+}
+
+.visual-circle {
+    width: 300px;
+    height: 300px;
+
+    position: absolute;
+
+    background: var(--light);
+    border-radius: 50%;
+}
+
+.food-illustration {
+    width: 265px;
+    height: 300px;
+
+    position: relative;
+    z-index: 2;
+
+    background: linear-gradient(
+        145deg,
+        var(--white),
+        var(--light)
+    );
+
+    border: 1px solid var(--white);
+    border-radius: 30px;
+
+    box-shadow: 0 25px 60px #0F513225;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transform: rotate(-5deg);
+}
+
+.food-emoji {
+    font-size: 100px;
+    margin-bottom: 10px;
+}
+
+.food-illustration h3 {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.food-illustration p {
+    font-size: 19px;
+    color: var(--orange);
+    font-weight: 800;
+}
+
+.food-decoration {
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    color: var(--orange);
+    font-size: 30px;
+}
+
+.floating-card {
+    position: absolute;
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 13px 17px;
+
+    background: var(--white);
+    border-radius: 12px;
+
+    box-shadow: 0 12px 35px #0F51321A;
+}
+
+.floating-one {
+    top: 45px;
+    right: 0;
+}
+
+.floating-two {
+    bottom: 35px;
+    left: 0;
+}
+
+.floating-icon {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--light);
+    color: var(--primary);
+
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.orange-icon {
+    color: var(--orange);
+}
+
+.floating-card strong {
+    display: block;
+    font-size: 11px;
+    color: var(--dark);
+}
+
+.floating-card small {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+    color: var(--muted);
+}
+
+
+/* =================================
+   STATISTICS
+================================= */
+
+.statistics {
+    background: var(--primary);
+    color: var(--white);
+
+    padding: 30px 8%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item h2 {
+    color: var(--accent);
+    font-size: 29px;
+    margin-bottom: 6px;
+}
+
+.stat-item p {
+    font-size: 11px;
+    color: var(--light);
+}
+
+
+/* =================================
+   HOW IT WORKS
+================================= */
+
+.how-section {
+    max-width: 1250px;
+    margin: auto;
+    padding: 85px 6%;
+}
+
+.section-heading {
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 45px;
+}
+
+.section-tag {
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.section-heading h2 {
+    margin-top: 13px;
+    font-size: 36px;
+    color: var(--dark);
+}
+
+.section-heading h2 span {
+    color: var(--primary);
+}
+
+.section-heading p {
+    margin-top: 13px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.step-card {
+    position: relative;
+
+    padding: 30px 25px;
+
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+
+    transition: 0.3s;
+}
+
+.step-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 40px #0F513218;
+    border-color: var(--accent);
+}
+
+.step-icon {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 15px;
+    font-size: 25px;
+}
+
+.green-bg {
+    background: var(--light);
+}
+
+.orange-bg {
+    background: #FFF0E5;
+}
+
+.step-number {
+    position: absolute;
+    right: 25px;
+    top: 30px;
+
+    font-size: 25px;
+    font-weight: 800;
+    color: #E3EEE6;
+}
+
+.step-card h3 {
+    margin-top: 25px;
+    color: var(--primary);
+    font-size: 17px;
+}
+
+.step-card p {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+
+/* =================================
+   CTA SECTION
+================================= */
+
+.cta-section {
+    margin: 20px 6% 65px;
+    padding: 45px 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+
+    background: var(--primary);
+    border-radius: 20px;
+    color: var(--white);
+}
+
+.cta-section h2 {
+    margin-top: 12px;
+    font-size: 29px;
+}
+
+.cta-section p {
+    margin-top: 10px;
+    max-width: 570px;
+    color: var(--light);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.cta-tag {
+    color: var(--accent);
+}
+
+.cta-button {
+    padding: 15px 22px;
+
+    background: var(--orange);
+    color: var(--dark);
+
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.cta-button:hover {
+    background: var(--white);
+    transform: translateY(-3px);
+}
+
+
+/* =================================
+   FOOTER
+================================= */
+
+.footer {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+
+    padding: 25px 7%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.footer-brand p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.footer-copy {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =================================
+   RESPONSIVE DESIGN
+================================= */
+
+@media (max-width: 950px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .nav-links {
+        gap: 14px;
+    }
+
+    .hero {
+        padding: 65px 5%;
+        gap: 20px;
+    }
+
+    .hero h1 {
+        font-size: 48px;
+    }
+
+    .hero-visual {
+        transform: scale(0.9);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .navbar {
+        min-height: 70px;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 15px 5%;
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .nav-links a {
+        font-size: 10px;
+    }
+
+    .nav-actions {
+        gap: 10px;
+    }
+
+    .signup-btn {
+        padding: 10px 12px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 55px 6% 30px;
+    }
+
+    .hero h1 {
+        font-size: 44px;
+        letter-spacing: -2px;
+    }
+
+    .hero-description {
+        font-size: 13px;
+    }
+
+    .hero-visual {
+        min-height: 350px;
+        transform: scale(0.95);
+    }
+
+    .statistics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .how-section {
+        padding: 65px 6%;
+    }
+
+    .section-heading h2 {
+        font-size: 29px;
+    }
+
+    .steps-container {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-section {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 32px 25px;
+    }
+
+    .cta-section h2 {
+        font-size: 24px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* =================================
+   FOODORAX AUTHENTICATION PAGES
+================================= */
+
+.auth-page {
+    min-height: 100vh;
+    padding: 35px 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(circle at top left, #E8F5E9, transparent 45%),
+        #F8FBF8;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+
+    padding: 38px;
+
+    background: #FFFFFF;
+    border: 1px solid #E2ECE5;
+    border-radius: 20px;
+
+    box-shadow: 0 20px 60px #0F513215;
+}
+
+.auth-logo {
+    display: block;
+    text-align: center;
+
+    font-size: 27px;
+    font-weight: 800;
+    color: #0F5132;
+
+    margin-bottom: 35px;
+}
+
+.auth-logo span {
+    color: #22C55E;
+}
+
+.auth-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-heading h1 {
+    color: #1F2937;
+    font-size: 27px;
+    margin-top: 12px;
+}
+
+.auth-heading p {
+    font-size: 12px;
+    color: #718078;
+    margin-top: 10px;
+    line-height: 1.7;
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.auth-card label {
+    color: #1F2937;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.auth-card input,
+.auth-card select {
+    width: 100%;
+    padding: 13px;
+
+    background: #F8FBF8;
+    border: 1px solid #E2ECE5;
+    border-radius: 9px;
+
+    font-size: 13px;
+    outline: none;
+}
+
+.auth-card input:focus,
+.auth-card select:focus {
+    border-color: #22C55E;
+    box-shadow: 0 0 0 3px #22C55E20;
+}
+
+.auth-submit {
+    margin-top: 15px;
+    padding: 15px;
+
+    background: #0F5132;
+    color: #FFFFFF;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-submit:hover {
+    background: #22C55E;
+    color: #1F2937;
+}
+
+.auth-switch {
+    text-align: center;
+    font-size: 12px;
+    color: #718078;
+    margin-top: 24px;
+}
+
+.auth-switch a {
+    color: #0F5132;
+    font-weight: 800;
+}
+
+.back-home {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+
+    color: #718078;
+    font-size: 12px;
+}
+
+.auth-message {
+    padding: 12px;
+    margin-bottom: 15px;
+
+    border-radius: 8px;
+    background: #E8F5E9;
+    color: #0F5132;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* =================================
+   FOOD DONATION FORM
+================================= */
+
+.donation-card {
+    width: 100%;
+    max-width: 600px;
+
+    padding: 38px;
+
+    background: #FFFFFF;
+    border: 1px solid #E2ECE5;
+    border-radius: 20px;
+
+    box-shadow: 0 20px 60px #0F513215;
+}
+
+.donation-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.donation-card label {
+    color: #1F2937;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.donation-card input,
+.donation-card select,
+.donation-card textarea {
+    width: 100%;
+    padding: 13px;
+
+    background: #F8FBF8;
+    border: 1px solid #E2ECE5;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 13px;
+    color: #1F2937;
+
+    outline: none;
+}
+
+.donation-card textarea {
+    resize: vertical;
+}
+
+.donation-card input:focus,
+.donation-card select:focus,
+.donation-card textarea:focus {
+    border-color: #22C55E;
+    box-shadow: 0 0 0 3px #22C55E20;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.food-safety-note {
+    margin-top: 12px;
+    padding: 16px;
+
+    background: #E8F5E9;
+    border-left: 4px solid #22C55E;
+    border-radius: 8px;
+}
+
+.food-safety-note strong {
+    color: #0F5132;
+    font-size: 12px;
+}
+
+.food-safety-note p {
+    margin-top: 7px;
+    color: #52675B;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+
+    .donation-card {
+        padding: 24px 18px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+
+/* =================================
+   FOOD LISTINGS PAGE
+================================= */
+
+.listings-page {
+    min-height: 100vh;
+    background: #F8FBF8;
+}
+
+.listings-container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 65px 6%;
+}
+
+.listings-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.listings-heading h1 {
+    margin-top: 13px;
+    color: #1F2937;
+    font-size: 38px;
+}
+
+.listings-heading p {
+    margin-top: 12px;
+    color: #718078;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.listing-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.food-card {
+    padding: 22px;
+    background: #FFFFFF;
+    border: 1px solid #E2ECE5;
+    border-radius: 17px;
+    transition: 0.3s;
+}
+
+.food-card:hover {
+    transform: translateY(-5px);
+    border-color: #22C55E;
+    box-shadow: 0 15px 35px #0F513215;
+}
+
+.food-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.food-category {
+    padding: 7px 10px;
+    background: #E8F5E9;
+    color: #0F5132;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.food-status {
+    color: #0F5132;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.food-emoji-box {
+    height: 130px;
+    margin: 18px 0;
+
+    display: grid;
+    place-items: center;
+
+    background: #E8F5E9;
+    border-radius: 12px;
+
+    font-size: 65px;
+}
+
+.food-card h2 {
+    color: #0F5132;
+    font-size: 19px;
+}
+
+.food-donor {
+    margin-top: 7px;
+    margin-bottom: 20px;
+    font-size: 11px;
+    color: #718078;
+}
+
+.food-detail {
+    padding: 12px 0;
+    border-top: 1px solid #E2ECE5;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.food-detail span {
+    color: #718078;
+    font-size: 10px;
+}
+
+.food-detail strong {
+    color: #1F2937;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.food-description {
+    padding: 12px;
+    background: #F8FBF8;
+    border-radius: 8px;
+
+    color: #718078;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.empty-listings {
+    padding: 55px 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2ECE5;
+    border-radius: 17px;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 55px;
+}
+
+.empty-listings h2 {
+    margin-top: 15px;
+    color: #0F5132;
+}
+
+.empty-listings p {
+    margin: 12px 0 25px;
+    color: #718078;
+    font-size: 12px;
+}
+
+@media (max-width: 850px) {
+    .food-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .listings-heading h1 {
+        font-size: 29px;
+    }
+
+    .listings-container {
+        padding: 45px 5%;
+    }
+}
+
+/* FoodoraX Dashboard Button Layout Fix */
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+    margin: 25px 0 30px;
+    position: relative;
+    clear: both;
+}
+
+.dashboard-actions a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 180px;
+    min-height: 60px;
+    padding: 15px 25px;
+    box-sizing: border-box;
+    text-decoration: none;
+    position: relative;
+    margin: 0;
+}
+
+.auth-message {
+    position: relative;
+    clear: both;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .dashboard-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dashboard-actions a {
+        width: 100%;
+    }
+}
+
+
+/* =================================
+   FOODORAX DASHBOARD DESIGN
+================================= */
+
+.dashboard-container {
+    width: 100%;
+    min-height: 100vh;
+    background: #f4f8f5;
+    color: #1f2937;
+    padding: 25px 6%;
+}
+
+.dashboard-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(15, 81, 50, 0.06);
+}
+
+.dashboard-user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: 600;
+}
+
+.dashboard-logout {
+    text-decoration: none;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.dashboard-main {
+    max-width: 1150px;
+    margin: 55px auto;
+}
+
+.dashboard-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.dashboard-heading h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    color: #0f5132;
+    margin: 15px 0;
+}
+
+.dashboard-heading p {
+    color: #64748b;
+    font-size: 16px;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 30px 0 40px;
+}
+
+.dashboard-actions a {
+    text-decoration: none;
+    padding: 14px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.dashboard-actions .primary-btn {
+    background: #0f5132;
+    color: white;
+}
+
+.dashboard-actions .primary-btn:hover {
+    background: #167044;
+    transform: translateY(-3px);
+}
+
+.dashboard-actions .secondary-btn {
+    background: #fff0e5;
+    color: #d96a20;
+    border: 1px solid #ffcfad;
+}
+
+.dashboard-actions .secondary-btn:hover {
+    background: #ffe0c9;
+    transform: translateY(-3px);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(15, 81, 50, 0.07);
+    border: 1px solid #e5eee8;
+    transition: 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 35px rgba(15, 81, 50, 0.12);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e8f5e9;
+    border-radius: 14px;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.stat-card p {
+    color: #64748b;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.stat-card h2 {
+    color: #0f5132;
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.stat-card span {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.dashboard-panel {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(15, 81, 50, 0.06);
+    border: 1px solid #e5eee8;
+}
+
+.dashboard-panel h2 {
+    color: #0f5132;
+    margin: 12px 0 25px;
+}
+
+.profile-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.profile-details p {
+    background: #f7faf8;
+    padding: 16px;
+    border-radius: 10px;
+    color: #475569;
+    overflow-wrap: anywhere;
+}
+
+.profile-details strong {
+    color: #0f5132;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 25px;
+    color: #0f5132;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-home:hover {
+    color: #22a05a;
+}
+
+@media (max-width: 700px) {
+    .dashboard-container {
+        padding: 15px;
+    }
+
+    .dashboard-topbar {
+        padding: 15px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-user {
+        gap: 10px;
+        font-size: 13px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-details {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-main {
+        margin-top: 35px;
+    }
+
+    .dashboard-panel {
+        padding: 20px;
+    }
+}
+
+
+/* =================================
+   FOODORAX FOOD LISTINGS
+================================= */
+
+.listings-page {
+    margin: 0;
+    min-height: 100vh;
+    background: #f4f8f5;
+    color: #1f2937;
+}
+
+.listings-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 6%;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(15, 81, 50, 0.06);
+}
+
+.listings-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.listings-nav-links a {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.listings-nav-links a:hover {
+    color: #16a34a;
+}
+
+.listings-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 55px 25px;
+}
+
+.listings-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.listings-heading h1 {
+    font-size: clamp(30px, 4vw, 42px);
+    color: #0f5132;
+    margin: 15px 0;
+}
+
+.listings-heading p {
+    color: #64748b;
+    font-size: 16px;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.food-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid #e4eee7;
+    box-shadow: 0 8px 25px rgba(15, 81, 50, 0.06);
+    transition: 0.3s ease;
+    overflow-wrap: anywhere;
+}
+
+.food-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 16px 35px rgba(15, 81, 50, 0.12);
+}
+
+.food-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.food-category {
+    background: #e8f5e9;
+    color: #0f5132;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.food-status {
+    background: #dcfce7;
+    color: #15803d;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.food-card-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff3e8;
+    border-radius: 18px;
+    font-size: 32px;
+    margin: 25px 0 15px;
+}
+
+.food-card h2 {
+    color: #0f5132;
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+.food-description {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 48px;
+}
+
+.food-info {
+    margin-top: 22px;
+    border-top: 1px solid #edf2ee;
+    padding-top: 15px;
+}
+
+.food-info p {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.food-info p span {
+    color: #64748b;
+}
+
+.food-info p strong {
+    color: #1f2937;
+    text-align: right;
+}
+
+.food-card-footer {
+    margin-top: 15px;
+    padding: 13px;
+    text-align: center;
+    background: #f0f9f1;
+    border-radius: 10px;
+    color: #0f5132;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.empty-listings {
+    max-width: 550px;
+    margin: 30px auto;
+    padding: 50px 25px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(15, 81, 50, 0.06);
+}
+
+.empty-listings div {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.empty-listings h2 {
+    color: #0f5132;
+    margin-bottom: 12px;
+}
+
+.empty-listings p {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.empty-listings .primary-btn {
+    display: inline-block;
+    padding: 13px 22px;
+    border-radius: 10px;
+    background: #0f5132;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.listings-container > .back-home {
+    display: inline-block;
+    margin-top: 35px;
+    color: #0f5132;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .listings-navbar {
+        flex-direction: column;
+        gap: 18px;
+        padding: 18px;
+    }
+
+    .listings-nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        font-size: 13px;
+    }
+
+    .listings-container {
+        padding: 35px 16px;
+    }
+
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .food-card {
+        padding: 20px;
+    }
+}
+
+
+/* FOOD CLAIM SYSTEM */
+
+.claim-form {
+    margin-top: 18px;
+}
+
+.claim-btn {
+    width: 100%;
+    padding: 14px;
+    background: #0f5132;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.claim-btn:hover {
+    background: #22a05a;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(15, 81, 50, 0.18);
+}
+
+.claimed-message {
+    margin-top: 18px;
+    padding: 13px;
+    text-align: center;
+    border-radius: 10px;
+    background: #fff0e5;
+    color: #c45b16;
+    font-weight: 700;
+}
+
+/* FoodoraX Hero Button Spacing Fix */
+
+.hero-content p {
+    margin-bottom: 30px;
+    line-height: 1.8;
+}
+
+.hero-content .primary-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+    min-height: 54px;
+    padding: 16px 26px;
+    z-index: 2;
+}
+
+.hero-content .hero-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+
+/* =================================
+   FOODORAX COMMUNITY IMPACT
+================================= */
+
+.impact-section {
+    margin: 45px 0;
+    padding: 35px;
+    background: linear-gradient(135deg, #0f5132, #176b45);
+    border-radius: 24px;
+    color: white;
+    overflow: hidden;
+    position: relative;
+}
+
+.impact-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.impact-heading .section-tag {
+    color: #bbf7d0;
+}
+
+.impact-heading h2 {
+    font-size: 30px;
+    margin: 15px 0 10px;
+    color: white;
+}
+
+.impact-heading p {
+    color: #d1fae5;
+    line-height: 1.6;
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.impact-card {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 25px 15px;
+    border-radius: 17px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: 0.3s ease;
+}
+
+.impact-card:hover {
+    background: rgba(255, 255, 255, 0.19);
+    transform: translateY(-5px);
+}
+
+.impact-icon {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.impact-card h3 {
+    font-size: 35px;
+    color: #bbf7d0;
+    margin-bottom: 8px;
+}
+
+.impact-card p {
+    color: #ecfdf5;
+    font-size: 13px;
+}
+
+.impact-message {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 25px;
+    padding: 22px;
+    background: #ffffff;
+    color: #0f5132;
+    border-radius: 15px;
+}
+
+.impact-message > span {
+    font-size: 35px;
+}
+
+.impact-message h3 {
+    margin-bottom: 7px;
+}
+
+.impact-message p {
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+    .impact-section {
+        padding: 22px 15px;
+    }
+
+    .impact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .impact-heading h2 {
+        font-size: 24px;
+    }
+
+    .impact-message {
+        align-items: flex-start;
+        padding: 17px;
+    }
+}
+
+
+/* =================================
+   FOODORAX PICKUP COORDINATION
+================================= */
+
+.pickup-container {
+    max-width: 760px;
+    margin: 55px auto;
+    padding: 0 20px;
+}
+
+.pickup-card {
+    background: #ffffff;
+    padding: 38px;
+    border-radius: 22px;
+    border: 1px solid #e5eee8;
+    box-shadow: 0 12px 35px rgba(15, 81, 50, 0.08);
+}
+
+.pickup-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f5e9;
+    border-radius: 18px;
+    font-size: 32px;
+    margin-bottom: 22px;
+}
+
+.pickup-card h1 {
+    color: #0f5132;
+    font-size: 32px;
+    margin: 12px 0;
+}
+
+.pickup-subtitle {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+
+.pickup-food-details {
+    background: #f7faf8;
+    padding: 22px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.pickup-food-details h2 {
+    color: #0f5132;
+    margin-bottom: 18px;
+}
+
+.pickup-food-details p {
+    padding: 10px 0;
+    border-bottom: 1px solid #e5eee8;
+    color: #475569;
+    overflow-wrap: anywhere;
+}
+
+.pickup-food-details p:last-child {
+    border-bottom: none;
+}
+
+.pickup-form label {
+    display: block;
+    color: #0f5132;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.pickup-form textarea {
+    width: 100%;
+    min-height: 125px;
+    padding: 15px;
+    border: 1px solid #dbe7de;
+    border-radius: 12px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 18px;
+    box-sizing: border-box;
+}
+
+.pickup-form textarea:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.10);
+}
+
+.pickup-instructions-box {
+    background: #e8f5e9;
+    padding: 22px;
+    border-radius: 15px;
+    border-left: 4px solid #22c55e;
+}
+
+.pickup-instructions-box h3 {
+    color: #0f5132;
+    margin-bottom: 12px;
+}
+
+.pickup-instructions-box p {
+    color: #475569;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .pickup-container {
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    .pickup-card {
+        padding: 23px;
+    }
+
+    .pickup-card h1 {
+        font-size: 26px;
+    }
+}
+
+
+.pickup-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    padding: 13px;
+    background: #fff0e5;
+    color: #c45b16;
+    border: 1px solid #ffcfad;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.pickup-link:hover {
+    background: #ffe0c9;
+    transform: translateY(-2px);
+}
+
+
+/* ==============================
+   FOODORAX NOTIFICATIONS PAGE
+============================== */
+
+.notifications-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 45px 25px;
+    min-height: 100vh;
+    background: #f7faf7;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+}
+
+.notification-tag {
+    color: #22C55E;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.notifications-header h1 {
+    color: #0F5132;
+    font-size: 34px;
+    margin: 10px 0;
+}
+
+.notifications-header p {
+    color: #64748b;
+    font-size: 15px;
+}
+
+.notification-back {
+    text-decoration: none;
+    color: white;
+    background: #0F5132;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.notification-back:hover {
+    background: #22C55E;
+    transform: translateY(-2px);
+}
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.notification-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: white;
+    padding: 22px;
+    border: 1px solid #e5eee7;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(15, 81, 50, 0.05);
+    transition: 0.3s;
+}
+
+.notification-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(15, 81, 50, 0.10);
+}
+
+.notification-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #E8F5E9;
+    border-radius: 14px;
+    font-size: 23px;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content h3 {
+    color: #1F2937;
+    font-size: 16px;
+    margin: 0 0 8px;
+}
+
+.notification-content p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 9px;
+}
+
+.notification-time {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.notification-status {
+    color: #0F5132;
+    background: #E8F5E9;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.notification-empty {
+    background: white;
+    border: 1px solid #e5eee7;
+    border-radius: 20px;
+    padding: 65px 25px;
+    text-align: center;
+    box-shadow: 0 5px 18px rgba(15, 81, 50, 0.05);
+}
+
+.empty-bell {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.notification-empty h2 {
+    color: #0F5132;
+    margin-bottom: 10px;
+}
+
+.notification-empty p {
+    color: #64748b;
+    max-width: 450px;
+    margin: 0 auto 25px;
+    line-height: 1.7;
+}
+
+.notification-explore {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background: #FF8A3D;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.notification-explore:hover {
+    background: #f97316;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .notifications-page {
+        padding: 25px 15px;
+    }
+
+    .notifications-header h1 {
+        font-size: 27px;
+    }
+
+    .notification-card {
+        padding: 16px;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .notification-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        font-size: 19px;
+    }
+
+    .notification-status {
+        display: none;
+    }
+
+    .notification-empty {
+        padding: 45px 18px;
+    }
+}
+
+
+/* ==============================
+   FOODORAX NOTIFICATION BELL
+============================== */
+
+.notification-bell {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    font-size: 21px;
+    text-decoration: none;
+
+    background: #E8F5E9;
+    border: 1px solid #d1ead7;
+    border-radius: 12px;
+
+    transition: all 0.25s ease;
+}
+
+.notification-bell:hover {
+    background: #d4f3dc;
+    transform: translateY(-2px);
+}
+
+/* Red dot for unread notifications */
+
+.notification-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    width: 10px;
+    height: 10px;
+
+    background: #EF4444;
+    border: 2px solid white;
+    border-radius: 50%;
+
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12);
+}
+
+/* Homepage navbar alignment */
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Dashboard navbar alignment */
+
+.dashboard-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+@media (max-width: 600px) {
+    .nav-actions {
+        gap: 7px;
+    }
+
+    .notification-bell {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 19px;
+    }
+
+    .dashboard-user {
+        gap: 8px;
+    }
+}
+
+/* Food Donation Image */
+
+.food-image-container {
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin: 15px 0;
+    background: #E8F5E9;
+}
+
+.food-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.food-image-container:hover .food-card-image {
+    transform: scale(1.05);
+}
+
+.food-card-icon {
+    width: 100%;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    background: #E8F5E9;
+    border-radius: 16px;
+    margin: 15px 0;
+}
+
+/* Delete and Unclaim Buttons */
+
+.delete-form,
+.unclaim-form {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.delete-btn,
+.unclaim-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Donor Delete Button */
+
+.delete-btn {
+    background: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+}
+
+.delete-btn:hover {
+    background: #DC2626;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+/* Recipient Unclaim Button */
+
+.unclaim-btn {
+    background: #FFF0E5;
+    color: #C2410C;
+    border: 1px solid #FED7AA;
+}
+
+.unclaim-btn:hover {
+    background: #FF8A3D;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.delete-btn:active,
+.unclaim-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* FoodoraX Search and Filter */
+
+.food-filter-form {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr auto auto;
+    align-items: end;
+    gap: 14px;
+    padding: 22px;
+    margin: 28px 0 32px;
+    background: #ffffff;
+    border: 1px solid #e5eee7;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(15, 81, 50, 0.07);
+}
+
+.food-filter-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #1F2937;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.food-filter-form input,
+.food-filter-form select {
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    padding: 0 13px;
+    border: 1px solid #dce7df;
+    border-radius: 10px;
+    background: #f9fcf9;
+    color: #1F2937;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.food-filter-form input:focus,
+.food-filter-form select:focus {
+    border-color: #22C55E;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+    background: #ffffff;
+}
+
+.filter-btn,
+.reset-filter-btn {
+    height: 46px;
+    padding: 0 18px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.filter-btn {
+    border: none;
+    background: #0F5132;
+    color: #ffffff;
+}
+
+.filter-btn:hover {
+    background: #22C55E;
+    transform: translateY(-2px);
+}
+
+.reset-filter-btn {
+    background: #fff3e9;
+    color: #d96b20;
+    border: 1px solid #ffe0c7;
+}
+
+.reset-filter-btn:hover {
+    background: #FF8A3D;
+    color: #ffffff;
+}
+
+/* Responsive Design */
+
+@media (max-width: 900px) {
+    .food-filter-form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .food-filter-form {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .filter-btn,
+    .reset-filter-btn {
+        width: 100%;
+    }
+}
+
+
+/* Food Expiry Status Colors */
+
+.food-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-expiring {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-claimed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.food-status {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.status-available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-expiring {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-claimed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+
+/* FoodoraX Expiry Statistics */
+
+.expiry-stat-card {
+    border-top: 4px solid #FF8A3D;
+    background: linear-gradient(145deg, #ffffff, #fff8f1);
+}
+
+.expired-stat-card {
+    border-top: 4px solid #ef4444;
+    background: linear-gradient(145deg, #ffffff, #fff1f1);
+}
+
+.expiry-stat-card .stat-icon {
+    background: #fff0df;
+    color: #c2410c;
+}
+
+.expired-stat-card .stat-icon {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.expiry-stat-card h2 {
+    color: #c2410c;
+}
+
+.expired-stat-card h2 {
+    color: #b91c1c;
+}
+
+/* Responsive Dashboard Statistics */
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==============================
+   FOODORAX DONATION ANALYTICS
+================================ */
+
+.analytics-section {
+    margin-top: 35px;
+    padding: 25px;
+    background: #ffffff;
+    border: 1px solid #e5eee8;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(15, 81, 50, 0.06);
+}
+
+.analytics-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.analytics-heading h2 {
+    color: #0F5132;
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.analytics-heading p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.analytics-badge {
+    background: #E8F5E9;
+    color: #0F5132;
+    padding: 9px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.analytics-card {
+    background: linear-gradient(145deg, #ffffff, #f5fbf6);
+    border: 1px solid #e3eee6;
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.analytics-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(15, 81, 50, 0.10);
+}
+
+.analytics-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #E8F5E9;
+    border-radius: 13px;
+    font-size: 23px;
+    margin-bottom: 17px;
+}
+
+.analytics-card h3 {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.analytics-card h2 {
+    color: #0F5132;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.analytics-card p {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.success-rate-card {
+    margin-top: 22px;
+    padding: 25px;
+    background: linear-gradient(120deg, #0F5132, #176b43);
+    border-radius: 17px;
+    color: #ffffff;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 15px;
+}
+
+.success-rate-info h3 {
+    font-size: 18px;
+    margin-bottom: 7px;
+}
+
+.success-rate-info p {
+    color: #d1fae5;
+    font-size: 13px;
+}
+
+.success-rate-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: #86efac;
+}
+
+.success-progress {
+    grid-column: 1 / -1;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.20);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.success-progress-fill {
+    height: 100%;
+    background: #FF8A3D;
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+/* Responsive Analytics */
+
+@media (max-width: 1000px) {
+    .analytics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .analytics-section {
+        padding: 17px;
+    }
+
+    .analytics-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-card {
+        padding: 18px;
+    }
+
+    .success-rate-card {
+        padding: 20px;
+    }
+
+    .success-rate-value {
+        font-size: 25px;
+    }
+}
+
+/* ==============================
+   RECENT DONATION ACTIVITY
+================================ */
+
+.recent-activity-section {
+    margin-top: 30px;
+    padding: 25px;
+    background: #ffffff;
+    border: 1px solid #e5eee8;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(15, 81, 50, 0.06);
+}
+
+.recent-activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.recent-activity-header h2 {
+    color: #0F5132;
+    font-size: 22px;
+    margin-bottom: 7px;
+}
+
+.recent-activity-header p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.view-all-btn {
+    text-decoration: none;
+    color: #0F5132;
+    background: #E8F5E9;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.view-all-btn:hover {
+    background: #0F5132;
+    color: #ffffff;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 18px 0;
+    border-bottom: 1px solid #edf2ee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-food-icon {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #E8F5E9;
+    border-radius: 15px;
+    font-size: 25px;
+}
+
+.activity-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-details h3 {
+    color: #1F2937;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.activity-details p {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.activity-quantity {
+    display: inline-block;
+    color: #0F5132;
+    background: #f0fdf4;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.activity-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.activity-status span {
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status-available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-claimed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.activity-status small {
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.empty-activity {
+    text-align: center;
+    padding: 40px 15px;
+}
+
+.empty-activity span {
+    font-size: 40px;
+}
+
+.empty-activity h3 {
+    color: #0F5132;
+    margin: 12px 0 7px;
+}
+
+.empty-activity p {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 600px) {
+    .recent-activity-section {
+        padding: 17px;
+    }
+
+    .recent-activity-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .activity-item {
+        gap: 11px;
+        align-items: flex-start;
+    }
+
+    .activity-food-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+    .activity-details h3 {
+        font-size: 13px;
+    }
+
+    .activity-status span {
+        font-size: 10px;
+        padding: 6px 9px;
+    }
+
+    .activity-status small {
+        font-size: 9px;
+    }
+}
+
+/* FoodoraX Impact Certificate Button */
+
+.certificate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 12px 18px;
+    margin: 12px 0;
+
+    background: linear-gradient(135deg, #0F5132, #22C55E);
+    color: #ffffff !important;
+
+    text-decoration: none !important;
+    font-size: 13px;
+    font-weight: 700;
+
+    border: none;
+    border-radius: 10px;
+
+    box-shadow: 0 5px 15px rgba(15, 81, 50, 0.18);
+
+    transition: all 0.3s ease;
+}
+
+.certificate-btn:hover {
+    background: linear-gradient(135deg, #0b3d26, #16a34a);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 81, 50, 0.25);
+}
+
+
+/* FoodoraX Pickup Completion UI Fix */
+
+.pickup-completion-box {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 28px 0 20px;
+    padding: 24px;
+    border: 1px solid #bbf7d0;
+    border-radius: 16px;
+    background: #e8f5e9;
+    overflow: hidden;
+}
+
+.pickup-completion-box h3 {
+    margin: 0 0 12px;
+    color: #166534;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+}
+
+.pickup-completion-box p {
+    margin: 0 0 20px;
+    line-height: 1.7;
+    color: #374151;
+    overflow-wrap: break-word;
+}
+
+.pickup-completion-box form {
+    display: block;
+    width: 100%;
+    margin: 0;
+}
+
+.pickup-completion-box .claim-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 14px 18px;
+    margin: 0;
+    border: none;
+    border-radius: 10px;
+    background: #0F5132;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pickup-completion-box .claim-btn:hover {
+    background: #22C55E;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.pickup-completion-box .claim-btn:focus-visible {
+    outline: 3px solid #22C55E;
+    outline-offset: 3px;
+}
+
+.pickup-completion-box .claim-btn:active {
+    transform: scale(0.99);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .pickup-completion-box {
+        padding: 16px;
+        margin-top: 20px;
+    }
+
+    .pickup-completion-box .claim-btn {
+        width: 100%;
+        font-size: 14px;
+        padding: 13px 12px;
+    }
+}
+
+
+
+/* FoodoraX - Final Picked Up Badge */
+
+
+.status-picked-up {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+    margin: 0;
+
+    background: #dcfce7;
+    color: #166534;
+
+    border: 1px solid #86efac;
+    border-radius: 50px;
+
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+
+    white-space: nowrap;
+    box-shadow: none;
+}

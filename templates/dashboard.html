@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodoraX | Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+<div class="dashboard-container">
+
+    <header class="dashboard-topbar">
+        <a href="/" class="auth-logo">
+            🍃 Foodora<span>X</span>
+        </a>
+
+        <div class="dashboard-user">
+
+    <span>Welcome, {{ user['name'] }}</span>
+
+    <a href="{{ url_for('notifications') }}"
+       class="notification-bell"
+       aria-label="Notifications">
+
+        🔔
+
+        {% if unread_notifications > 0 %}
+            <span class="notification-dot"></span>
+        {% endif %}
+
+    </a>
+
+    <a href="/logout" class="dashboard-logout">
+        Logout
+    </a>
+
+</div>
+
+    </header>
+
+    <main class="dashboard-main">
+
+        <div class="dashboard-heading">
+            <span class="section-tag">YOUR FOODORAX SPACE</span>
+
+            <h1>Welcome back, {{ user['name'] }}! 👋</h1>
+
+            <p>
+                {% if user['role'] == 'donor' %}
+                    Your generosity can turn surplus food into smiles.
+                {% else %}
+                    Discover available food and help reduce food waste.
+                {% endif %}
+            </p>
+        </div>
+
+        
+
+<div class="dashboard-actions">
+
+    {% if user['role'] == 'donor' %}
+
+        <a href="/donate" class="primary-btn">
+            + Start Sharing Food
+        </a>
+
+        <a href="/food-listings" class="secondary-btn">
+            My Food Listings
+        </a>
+
+        <a href="/history" class="secondary-btn">
+            Donation History
+        </a>
+
+    {% elif user['role'] == 'recipient' %}
+
+        <a href="/food-listings" class="primary-btn">
+            🍱 Find Available Food
+        </a>
+
+        <a href="/food-listings" class="secondary-btn">
+            My Claimed Food
+        </a>
+
+    {% endif %}
+
+
+</div>
+
+        
+<section class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-icon">🍱</div>
+        <p>Total Listings</p>
+        <h2>{{ total_listings }}</h2>
+        <span>Food records</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">🟢</div>
+        <p>Available Food</p>
+        <h2>{{ available_food }}</h2>
+        <span>Currently available</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">⚖️</div>
+        <p>Total Quantity</p>
+        <h2>{{ total_quantity }}</h2>
+        <span>Units listed</span>
+    </div>
+
+    <div class="stat-card expiry-stat-card">
+        <div class="stat-icon">⏰</div>
+        <p>Expiring Soon</p>
+        <h2>{{ expiring_soon }}</h2>
+        <span>Expires today or tomorrow</span>
+    </div>
+
+    <div class="stat-card expired-stat-card">
+        <div class="stat-icon">⚠️</div>
+        <p>Expired Donations</p>
+        <h2>{{ expired_food }}</h2>
+        <span>Expired food records</span>
+    </div>
+
+</section>
+
+        
+<section class="impact-section">
+
+    <div class="impact-heading">
+        <span class="section-tag">OUR COMMUNITY IMPACT</span>
+        <h2>Small Donations, Big Smiles 💚</h2>
+        <p>Every shared meal creates an opportunity to make a difference.</p>
+    </div>
+
+    <div class="impact-grid">
+
+        <div class="impact-card">
+            <div class="impact-icon">🍱</div>
+            <h3>{{ total_community_donations }}</h3>
+            <p>Total Food Donations</p>
+        </div>
+
+        <div class="impact-card">
+            <div class="impact-icon">🤝</div>
+            <h3>{{ total_community_claimed }}</h3>
+            <p>Successfully Claimed</p>
+        </div>
+
+        <div class="impact-card">
+            <div class="impact-icon">⚖️</div>
+            <h3>{{ community_quantity }}</h3>
+            <p>Food Quantity Claimed</p>
+        </div>
+
+    </div>
+
+    <div class="impact-message">
+        <span>🌱</span>
+        <div>
+            <h3>Turning Surplus into Smiles</h3>
+            <p>
+                FoodoraX connects surplus food with people who need it,
+                helping build a more responsible and caring community.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- Donation Analytics Section -->
+<section class="analytics-section">
+
+    <div class="analytics-heading">
+        <div>
+            <span class="section-tag">PERFORMANCE OVERVIEW</span>
+            <h2>Donation Analytics 📊</h2>
+            <p>Track your food donation impact and community contribution.</p>
+        </div>
+
+        <span class="analytics-badge">Live Impact</span>
+    </div>
+
+    <div class="analytics-grid">
+
+        <div class="analytics-card">
+            <div class="analytics-icon">📊</div>
+            <h3>Total Donations</h3>
+            <h2>{{ total_donations }}</h2>
+            <p>Food donation records</p>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-icon">🤝</div>
+            <h3>Successful Donations</h3>
+            <h2>{{ successful_donations }}</h2>
+            <p>Successfully claimed</p>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-icon">🍱</div>
+            <h3>Total Food Donated</h3>
+            <h2>{{ total_food_donated }}</h2>
+            <p>Quantity across all donations</p>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-icon">💚</div>
+            <h3>Food Saved</h3>
+            <h2>{{ food_saved }}</h2>
+            <p>Quantity successfully claimed</p>
+        </div>
+
+    </div>
+
+    <div class="success-rate-card">
+
+        <div class="success-rate-info">
+            <h3>Donation Success Rate</h3>
+            <p>Percentage of donations successfully claimed</p>
+        </div>
+
+        <div class="success-rate-value">
+            {{ donation_success_rate }}%
+        </div>
+
+        <div class="success-progress">
+            <div class="success-progress-fill"
+                 style="width: {{ donation_success_rate }}%;">
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Recent Donation Activity -->
+<section class="recent-activity-section">
+
+    <div class="recent-activity-header">
+        <div>
+            <h2>Recent Donation Activity</h2>
+            <p>Latest food donations from the FoodoraX community.</p>
+        </div>
+
+        <a href="{{ url_for('food_listings') }}" class="view-all-btn">
+            View All →
+        </a>
+    </div>
+
+    <div class="activity-list">
+
+        {% for donation in recent_donations %}
+
+        <div class="activity-item">
+
+            <div class="activity-food-icon">
+                🍱
+            </div>
+
+            <div class="activity-details">
+                <h3>{{ donation['food_name'] }}</h3>
+
+                <p>
+                    Donated by {{ donation['donor_name'] }}
+                </p>
+
+                <span class="activity-quantity">
+                    {{ donation['quantity'] }} {{ donation['unit'] }}
+                </span>
+            </div>
+
+            <div class="activity-status">
+                <span class="status-{{ donation['status']|lower }}">
+                    {{ donation['status'] }}
+                </span>
+
+                <small>{{ donation['created_at'] }}</small>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-activity">
+            <span>🍽️</span>
+            <h3>No Donations Yet</h3>
+            <p>New food donations will appear here.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+        <section class="dashboard-panel">
+            <div>
+                <span class="section-tag">ACCOUNT OVERVIEW</span>
+                <h2>Your FoodoraX Profile</h2>
+            </div>
+
+            <div class="profile-details">
+                <p><strong>Name:</strong> {{ user['name'] }}</p>
+                <p><strong>Email:</strong> {{ user['email'] }}</p>
+                <p><strong>Account Type:</strong> {{ user['role']|title }}</p>
+                <p><strong>Organization:</strong> {{ user['organization'] or 'Not provided' }}</p>
+            </div>
+        </section>
+
+        <a href="/" class="back-home">← Back to Homepage</a>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodoraX | Donation History</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="listings-page">
+
+<header class="listings-navbar">
+
+    <a href="/" class="auth-logo">
+        🍃 Foodora<span>X</span>
+    </a>
+
+    <nav class="listings-nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/food-listings">Food Listings</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+</header>
+
+<main class="listings-container">
+
+    <section class="listings-heading">
+        <span class="section-tag">YOUR ACTIVITY</span>
+        <h1>Donation History 📋</h1>
+
+        {% if user['role'] == 'donor' %}
+            <p>Track all the food you have shared with the community.</p>
+        {% else %}
+            <p>View the food donations you have successfully claimed.</p>
+        {% endif %}
+    </section>
+
+    {% if history %}
+
+        <section class="food-grid">
+
+            {% for food in history %}
+
+                <article class="food-card">
+
+                    <div class="food-card-top">
+
+                        <span class="food-category">
+                            {{ food['category'] }}
+                        </span>
+
+
+{% if food['status'] == 'Completed' %}
+    <span class="status-picked-up">
+        Picked Up ✓
+    </span>
+
+{% elif food['status'] == 'Claimed' %}
+    <span class="claimed-message">
+        Claimed
+    </span>
+
+                    {% elif food['status'] == 'Expired' %}
+                        <span class="food-status" style="background: #fee2e2; color: #b91c1c;">
+                            Expired
+                        </span>
+
+                    {% else %}
+                        <span class="food-status">
+                            Available
+                        </span>
+                    {% endif %}
+
+                    </div>
+
+
+                    {% if food['image'] %}
+                        <div class="food-image-container">
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + food['image']) }}"
+                                alt="{{ food['food_name'] }}"
+                                class="food-image"
+                            >
+                        </div>
+                    {% else %}
+                        <div class="food-card-icon">🍱</div>
+                    {% endif %}
+
+                    <h2>{{ food['food_name'] }}</h2>
+
+                    <div class="food-info">
+
+                        <p>
+                            <span>⚖️ Quantity</span>
+                            <strong>{{ food['quantity'] }} {{ food['unit'] }}</strong>
+                        </p>
+
+                        <p>
+                            <span>📍 Location</span>
+                            <strong>{{ food['location'] }}</strong>
+                        </p>
+
+                        <p>
+                            <span>⏰ Expiry</span>
+                            <strong>{{ food['expiry'] }}</strong>
+                        </p>
+
+                        <p>
+                            <span>🤝 Donor</span>
+                            <strong>{{ food['donor_name'] }}</strong>
+                        </p>
+
+                        {% if user['role'] == 'donor' and food['status'] == 'Completed' %}
+                            <p>
+                                <span>👤 Claimed By</span>
+                                <strong>{{ food['recipient_name'] or 'Recipient' }}</strong>
+                            </p>
+                        {% endif %}
+
+                        <p>
+                            <span>📅 Listed On</span>
+                            <strong>{{ food['created_at'] }}</strong>
+                        </p>
+
+                    </div>
+
+{% if user['role'] == 'donor' and food['status'] == 'Claimed' %}
+
+    <a href="{{ url_for('download_certificate', donation_id=food['id']) }}"
+       class="certificate-btn">
+        🏆 Download Impact Certificate
+    </a>
+
+{% endif %}
+
+<div class="food-card-footer">
+    Turning surplus into smiles 💚
+</div>
+
+                </article>
+
+            {% endfor %}
+
+        </section>
+
+    {% else %}
+
+        <div class="empty-listings">
+            <div>📋</div>
+            <h2>No History Available</h2>
+
+            {% if user['role'] == 'donor' %}
+                <p>Your donation records will appear here once you publish food.</p>
+                <a href="/donate" class="primary-btn">+ Donate Food</a>
+            {% else %}
+                <p>Your claimed food records will appear here.</p>
+                <a href="/food-listings" class="primary-btn">Explore Food</a>
+            {% endif %}
+        </div>
+
+    {% endif %}
+
+    <a href="/dashboard" class="back-home">← Back to Dashboard</a>
+
+</main>
+
+</body>
+</html>

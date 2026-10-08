@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification | FoodoraX</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #E8F5E9;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .verify-container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+            text-align: center;
+        }
+
+        .verify-icon {
+            font-size: 65px;
+            margin-bottom: 10px;
+        }
+
+        .verified {
+            color: #15803D;
+        }
+
+        .failed {
+            color: #DC2626;
+        }
+
+        .verify-container h1 {
+            margin-bottom: 10px;
+        }
+
+        .verify-details {
+            text-align: left;
+            background: #F8FAFC;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
+
+        .verify-details p {
+            padding: 10px 0;
+            border-bottom: 1px solid #E5E7EB;
+            overflow-wrap: anywhere;
+        }
+
+        .brand {
+            color: #0F5132;
+            font-weight: bold;
+            font-size: 25px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            background: #0F5132;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="verify-container">
+
+    <div class="brand">FoodoraX</div>
+    <p>Turning Surplus into Smiles</p>
+
+    {% if verified %}
+
+        <div class="verify-icon verified">✓</div>
+
+        <h1 class="verified">Certificate Verified</h1>
+
+        <p>
+            This donation certificate is valid and
+            recorded in the FoodoraX database.
+        </p>
+
+        <div class="verify-details">
+
+            <p>
+                <strong>Verification ID:</strong>
+                {{ certificate['verification_id'] }}
+            </p>
+
+            <p>
+                <strong>Donation ID:</strong>
+                FX-{{ "%05d"|format(certificate['id']) }}
+            </p>
+
+            <p>
+                <strong>Donor:</strong>
+                {{ certificate['donor_name'] }}
+            </p>
+
+            <p>
+                <strong>Food Item:</strong>
+                {{ certificate['food_name'] }}
+            </p>
+
+            <p>
+                <strong>Quantity:</strong>
+                {{ certificate['quantity'] }}
+                {{ certificate['unit'] }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                <span class="verified">Claimed ✓</span>
+            </p>
+
+        </div>
+
+    {% else %}
+
+        <div class="verify-icon failed">✕</div>
+
+        <h1 class="failed">Verification Failed</h1>
+
+        <p>
+            This certificate could not be verified.
+            The Verification ID may be invalid.
+        </p>
+
+    {% endif %}
+
+    <a href="/" class="back-btn">Back to FoodoraX</a>
+
+</div>
+
+</body>
+</html>
