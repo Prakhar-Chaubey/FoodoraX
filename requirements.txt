@@ -3,3 +3,4 @@ Flask-Mail
 reportlab
 qrcode
 psycopg[binary]
+gunicorn
