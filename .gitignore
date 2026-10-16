@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+foodorax.db
+foodorax_backup.db
+.vercel/
+
+static/uploads/
+node_modules/

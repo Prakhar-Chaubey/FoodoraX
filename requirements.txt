@@ -1,4 +1,5 @@
 Flask
 Flask-Mail
 reportlab
-qrcode  
+qrcode
+psycopg[binary]

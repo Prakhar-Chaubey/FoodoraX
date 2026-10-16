@@ -7,6 +7,21 @@ from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, session, flash,send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+class HybridRow(dict):
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return list(self.values())[key]
+        return super().__getitem__(key)
+
+
+def hybrid_row_factory(cursor):
+    columns = [col.name for col in cursor.description]
+
+    def make_row(values):
+        return HybridRow(zip(columns, values))
+
+    return make_row
+
 import os
 import qrcode
 import uuid
@@ -42,16 +57,22 @@ def allowed_file(filename):
 
 app.secret_key = "FoodoraX-Hackathon-Secret-Key"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, "foodorax.db")
+# SUPABASE / POSTGRESQL DATABASE CONNECTION
+
+from dotenv import load_dotenv
+load_dotenv(".env.local")
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
-# DATABASE CONNECTION
+
 def get_db():
-    conn = sqlite3.connect(DATABASE, timeout=30)
+    conn = sqlite3.connect(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "foodorax.db"),
+        timeout=30
+    )
     conn.row_factory = sqlite3.Row
     return conn
-
 
 # CREATE USER TABLE
 
@@ -418,6 +439,45 @@ def register():
                     role,
                     organization
                 ))
+
+            # Send professional welcome email
+            try:
+                msg = Message(
+                    subject="Welcome to FoodoraX | Turning Surplus into Smiles",
+                    recipients=[email],
+                    sender=app.config["MAIL_DEFAULT_SENDER"]
+                )
+
+                msg.body = f"""Dear {name},
+
+Welcome to FoodoraX!
+
+Thank you for joining our community and becoming part of a
+mission that transforms surplus food into meaningful impact.
+
+At FoodoraX, we aim to connect surplus food from donors with
+people and communities who need it, helping reduce food waste
+and create a more sustainable future.
+
+Your account has been successfully created.
+
+You can now explore FoodoraX and participate in our mission
+to turn surplus into smiles.
+
+Together, every contribution counts.
+
+Thank you for being part of the change.
+
+Warm regards,
+Team FoodoraX
+Turning Surplus into Smiles
+"""
+
+                mail.send(msg)
+                print(f"Welcome email sent successfully to {email}")
+
+            except Exception as e:
+                print("Welcome email could not be sent:", e)
 
             flash("Account created successfully! Please login.")
             return redirect(url_for("login"))
@@ -944,7 +1004,7 @@ def admin_donations():
         ).fetchone()[0]
 
         pending = conn.execute(
-            "SELECT COUNT(*) FROM donations WHERE status = 'Pending'"
+            "SELECT COUNT(*) FROM donations WHERE status = 'Available'"
         ).fetchone()[0]
 
     return render_template(
@@ -958,108 +1018,6 @@ def admin_donations():
         expired=expired,
         pending=pending
     )
-
-
-@app.route("/admin/donations/<int:donation_id>/approve", methods=["POST"])
-def approve_donation(donation_id):
-
-    user = get_current_user()
-
-    if not user:
-        return redirect(url_for("login"))
-
-    if user["role"] != "admin":
-        flash("Access denied! Admin only.")
-        return redirect(url_for("dashboard"))
-
-    with get_db() as conn:
-
-        donation = conn.execute("""
-            SELECT donor_id, food_name, status
-            FROM donations
-            WHERE id = ?
-        """, (donation_id,)).fetchone()
-
-        if not donation:
-            flash("Donation not found.")
-
-        elif donation["status"] != "Pending":
-            flash("Only pending donations can be approved.")
-
-        else:
-            conn.execute("""
-                UPDATE donations
-                SET status = 'Available',
-                    rejection_reason = '',
-                    reviewed_at = CURRENT_TIMESTAMP
-                WHERE id = ?
-            """, (donation_id,))
-
-            conn.commit()
-
-            create_notification(
-                donation["donor_id"],
-                f"Your food donation '{donation['food_name']}' has been approved and is now available."
-            )
-
-            flash("Donation approved successfully!")
-
-    return redirect(url_for("admin_donations"))
-
-
-@app.route("/admin/donations/<int:donation_id>/reject", methods=["POST"])
-def reject_donation(donation_id):
-
-    user = get_current_user()
-
-    if not user:
-        return redirect(url_for("login"))
-
-    if user["role"] != "admin":
-        flash("Access denied! Admin only.")
-        return redirect(url_for("dashboard"))
-
-    reason = request.form.get("reason", "").strip()
-
-    if not reason:
-        flash("Please provide a rejection reason.")
-        return redirect(url_for("admin_donations"))
-
-    with get_db() as conn:
-
-        donation = conn.execute("""
-            SELECT donor_id, food_name, status
-            FROM donations
-            WHERE id = ?
-        """, (donation_id,)).fetchone()
-
-        if not donation:
-            flash("Donation not found.")
-
-        elif donation["status"] != "Pending":
-            flash("Only pending donations can be rejected.")
-
-        else:
-            conn.execute("""
-                UPDATE donations
-                SET status = 'Rejected',
-                    rejection_reason = ?,
-                    reviewed_at = CURRENT_TIMESTAMP
-                WHERE id = ?
-            """, (reason, donation_id))
-
-            conn.commit()
-
-            create_notification(
-                donation["donor_id"],
-                f"Your food donation '{donation['food_name']}' was rejected. Reason: {reason}"
-            )
-
-            flash("Donation rejected successfully.")
-
-    return redirect(url_for("admin_donations"))
-
-
 
 
 # FOOD DONATION
@@ -1144,13 +1102,10 @@ def donate():
                 location,
                 description,
                 image_filename,
-                "Pending"
+                "Available"
             ))
 
-        flash(
-            "Food donation submitted successfully! "
-            "Waiting for admin approval."
-        )
+        flash("Food donation added successfully! It is now available for recipients.")
 
         return redirect(url_for("dashboard"))
 
@@ -1351,6 +1306,11 @@ def claim_food(donation_id):
     create_notification(
         donation["donor_id"],
         f"{user['name']} claimed your food listing: {donation['food_name']}."
+    )
+
+    create_notification(
+    user["id"],
+    f"Your claim for '{donation['food_name']}' was successful. Please check the pickup instructions."
     )
 
 
@@ -1956,27 +1916,6 @@ def logout():
 
     return redirect(url_for("home"))
 
-print("Database Location:", DATABASE)
-
-with get_db() as conn:
-    columns = [
-        row["name"]
-        for row in conn.execute("PRAGMA table_info(donations)").fetchall()
-    ]
-
-    print("Donation Table Columns:", columns)
 
 if __name__ == "__main__":
-    create_database()
-
-    print("Database Location:", DATABASE)
-
-    with get_db() as conn:
-        tables = conn.execute("""
-            SELECT name FROM sqlite_master
-            WHERE type = 'table'
-        """).fetchall()
-
-        print("Database Tables:", [row["name"] for row in tables])
-
     app.run(debug=True)
