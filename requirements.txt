@@ -4,3 +4,4 @@ reportlab
 qrcode
 psycopg[binary]
 gunicorn
+python-dotenv
