@@ -6,7 +6,9 @@ from datetime import date, timedelta
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, session, flash,send_file
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
+import psycopg
+from psycopg.rows import dict_row
+
 class HybridRow(dict):
     def __getitem__(self, key):
         if isinstance(key, int):
@@ -14,7 +16,11 @@ class HybridRow(dict):
         return super().__getitem__(key)
 
 
+
 def hybrid_row_factory(cursor):
+    if cursor.description is None:
+        return lambda values: values
+
     columns = [col.name for col in cursor.description]
 
     def make_row(values):
@@ -66,120 +72,68 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 
+
 def get_db():
-    conn = sqlite3.connect(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "foodorax.db"),
-        timeout=30
+    database_url = os.environ.get("DATABASE_URL")
+
+    if not database_url:
+        raise RuntimeError("DATABASE_URL environment variable is not set")
+
+    return psycopg.connect(
+        database_url,
+        row_factory=hybrid_row_factory,
+        connect_timeout=15
     )
-    conn.row_factory = sqlite3.Row
-    return conn
+
 
 # CREATE USER TABLE
 
+
 def create_database():
     with get_db() as conn:
-        cursor = conn.cursor()
-
-        # Users Table
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL,
-                role TEXT NOT NULL,
-                organization TEXT
-            )
-        """)
-
-        # Food Donations Table
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS donations (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                donor_id INTEGER NOT NULL,
-                food_name TEXT NOT NULL,
-                category TEXT NOT NULL,
-                quantity INTEGER NOT NULL,
-                unit TEXT NOT NULL,
-                expiry TEXT NOT NULL,
-                location TEXT NOT NULL,
-                description TEXT,
-                status TEXT DEFAULT 'Available',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-                FOREIGN KEY (donor_id)
-                REFERENCES users(id)
-            )
-        """)
-
-        
-        columns = [
-            row["name"]
-            for row in conn.execute("PRAGMA table_info(donations)").fetchall()
-        ]
-
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS notifications (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                message TEXT NOT NULL,
-                is_read INTEGER DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
-
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS notifications (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                message TEXT NOT NULL,
-                is_read INTEGER DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
-
-        if "pickup_instructions" not in columns:
-            conn.execute("""
-                ALTER TABLE donations
-                ADD COLUMN pickup_instructions TEXT DEFAULT ''
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id SERIAL PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    email TEXT UNIQUE NOT NULL,
+                    password TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    organization TEXT
+                )
             """)
 
-        if "image" not in columns:
-            conn.execute("""
-                ALTER TABLE donations
-                ADD COLUMN image TEXT DEFAULT NULL
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS donations (
+                    id SERIAL PRIMARY KEY,
+                    donor_id INTEGER NOT NULL REFERENCES users(id),
+                    food_name TEXT NOT NULL,
+                    category TEXT NOT NULL,
+                    quantity INTEGER NOT NULL,
+                    unit TEXT NOT NULL,
+                    expiry TEXT NOT NULL,
+                    location TEXT NOT NULL,
+                    description TEXT,
+                    status TEXT DEFAULT 'Available',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    pickup_instructions TEXT DEFAULT '',
+                    image TEXT,
+                    verification_id TEXT,
+                    claimed_by INTEGER REFERENCES users(id),
+                    rejection_reason TEXT DEFAULT '',
+                    reviewed_at TIMESTAMP DEFAULT NULL
+                )
             """)
 
-        cursor.execute("PRAGMA table_info(donations)")
-        columns = [column[1] for column in cursor.fetchall()]
-
-        if "verification_id" not in columns:
-            cursor.execute(
-                "ALTER TABLE donations ADD COLUMN verification_id TEXT"
-            )
-
-        
-        if "claimed_by" not in columns:
-            conn.execute("""
-                ALTER TABLE donations
-                ADD COLUMN claimed_by INTEGER REFERENCES users(id)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS notifications (
+                    id SERIAL PRIMARY KEY,
+                    user_id INTEGER NOT NULL REFERENCES users(id),
+                    message TEXT NOT NULL,
+                    is_read INTEGER DEFAULT 0,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
             """)
-
-        if "rejection_reason" not in columns:
-            conn.execute("""
-                ALTER TABLE donations
-                ADD COLUMN rejection_reason TEXT DEFAULT ''
-            """)
-
-        if "reviewed_at" not in columns:
-            conn.execute("""
-                ALTER TABLE donations
-                ADD COLUMN reviewed_at TIMESTAMP DEFAULT NULL
-            """)
-
-        conn.commit()
 
 #ADMIN ACCOUNT      
 def create_admin_account():
@@ -201,7 +155,7 @@ def create_admin_account():
 
     try:
         existing = conn.execute(
-            "SELECT id FROM users WHERE email = ?",
+            "SELECT id FROM users WHERE email = %s",
             (email,)
         ).fetchone()
 
@@ -212,7 +166,7 @@ def create_admin_account():
         conn.execute("""
             INSERT INTO users
             (name, email, password, role, organization)
-            VALUES (?, ?, ?, 'admin', 'FoodoraX Administration')
+            VALUES (%s, %s, %s, 'admin', 'FoodoraX Administration')
         """, (name, email, hashed_password))
 
         conn.commit()
@@ -229,7 +183,7 @@ def get_current_user():
     if user_id:
         with get_db() as conn:
             return conn.execute(
-                "SELECT * FROM users WHERE id = ?",
+                "SELECT * FROM users WHERE id = %s",
                 (user_id,)
             ).fetchone()
 
@@ -371,10 +325,11 @@ def inject_notification_count():
         count = conn.execute("""
             SELECT COUNT(*) AS total
             FROM notifications
-            WHERE user_id = ? AND is_read = 0
+            WHERE user_id = %s AND is_read = 0
         """, (user["id"],)).fetchone()["total"]
 
     return {"unread_notifications": count}
+
 
 
 
@@ -382,10 +337,11 @@ def create_notification(user_id, message):
     conn = get_db()
 
     try:
-        conn.execute("""
-            INSERT INTO notifications (user_id, message)
-            VALUES (?, ?)
-        """, (user_id, message))
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO notifications (user_id, message)
+                VALUES (%s, %s)
+            """, (user_id, message))
 
         conn.commit()
 
@@ -431,7 +387,7 @@ def register():
                 conn.execute("""
                     INSERT INTO users
                     (name, email, password, role, organization)
-                    VALUES (?, ?, ?, ?, ?)
+                    VALUES (%s, %s, %s, %s, %s)
                 """, (
                     name,
                     email,
@@ -482,7 +438,7 @@ Turning Surplus into Smiles
             flash("Account created successfully! Please login.")
             return redirect(url_for("login"))
 
-        except sqlite3.IntegrityError:
+        except psycopg.IntegrityError:
             flash("This email is already registered.")
             return redirect(url_for("register"))
 
@@ -500,7 +456,7 @@ def login():
 
         with get_db() as conn:
             user = conn.execute(
-                "SELECT * FROM users WHERE email = ?",
+                "SELECT * FROM users WHERE email = %s",
                 (email,)
             ).fetchone()
 
@@ -541,7 +497,7 @@ def dashboard():
             UPDATE donations
             SET status = 'Expired'
             WHERE status = 'Available'
-              AND expiry < ?
+              AND expiry < %s
         """, (today.isoformat(),))
 
         if user["role"] == "donor":
@@ -550,36 +506,36 @@ def dashboard():
             total_listings = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
             """, (user["id"],)).fetchone()[0]
 
             available_food = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
                   AND status = 'Available'
             """, (user["id"],)).fetchone()[0]
 
             claimed_food = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
                   AND status IN ('Claimed', 'Completed')
             """, (user["id"],)).fetchone()[0]
 
             expired_food = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
                   AND status = 'Expired'
             """, (user["id"],)).fetchone()[0]
 
             expiring_soon = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
                   AND status = 'Available'
-                  AND expiry BETWEEN ? AND ?
+                  AND expiry BETWEEN %s AND %s
             """, (
                 user["id"],
                 today.isoformat(),
@@ -589,7 +545,7 @@ def dashboard():
             total_quantity = conn.execute("""
                 SELECT COALESCE(SUM(quantity), 0)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
             """, (user["id"],)).fetchone()[0]
 
             # Donor's personal impact
@@ -602,7 +558,7 @@ def dashboard():
             food_saved = conn.execute("""
                 SELECT COALESCE(SUM(quantity), 0)
                 FROM donations
-                WHERE donor_id = ?
+                WHERE donor_id = %s
                   AND status IN ('Claimed', 'Completed')
             """, (user["id"],)).fetchone()[0]
 
@@ -619,7 +575,7 @@ def dashboard():
                 FROM donations
                 JOIN users
                     ON donations.donor_id = users.id
-                WHERE donations.donor_id = ?
+                WHERE donations.donor_id = %s
                 ORDER BY donations.id DESC
                 LIMIT 5
             """, (user["id"],)).fetchall()
@@ -630,7 +586,7 @@ def dashboard():
             total_listings = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE claimed_by = ?
+                WHERE claimed_by = %s
             """, (user["id"],)).fetchone()[0]
 
             available_food = conn.execute("""
@@ -642,14 +598,14 @@ def dashboard():
             claimed_food = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE claimed_by = ?
+                WHERE claimed_by = %s
                   AND status IN ('Claimed', 'Completed')
             """, (user["id"],)).fetchone()[0]
 
             expired_food = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE claimed_by = ?
+                WHERE claimed_by = %s
                   AND status = 'Expired'
             """, (user["id"],)).fetchone()[0]
 
@@ -657,7 +613,7 @@ def dashboard():
                 SELECT COUNT(*)
                 FROM donations
                 WHERE status = 'Available'
-                  AND expiry BETWEEN ? AND ?
+                  AND expiry BETWEEN %s AND %s
             """, (
                 today.isoformat(),
                 tomorrow.isoformat()
@@ -666,7 +622,7 @@ def dashboard():
             total_quantity = conn.execute("""
                 SELECT COALESCE(SUM(quantity), 0)
                 FROM donations
-                WHERE claimed_by = ?
+                WHERE claimed_by = %s
                   AND status IN ('Claimed', 'Completed')
             """, (user["id"],)).fetchone()[0]
 
@@ -674,7 +630,7 @@ def dashboard():
             successful_donations = conn.execute("""
                 SELECT COUNT(*)
                 FROM donations
-                WHERE claimed_by = ?
+                WHERE claimed_by = %s
                   AND status = 'Completed'
             """, (user["id"],)).fetchone()[0]
 
@@ -693,7 +649,7 @@ def dashboard():
                 FROM donations
                 JOIN users
                     ON donations.donor_id = users.id
-                WHERE donations.claimed_by = ?
+                WHERE donations.claimed_by = %s
                 ORDER BY donations.id DESC
                 LIMIT 5
             """, (user["id"],)).fetchall()
@@ -725,7 +681,7 @@ def dashboard():
                 SELECT COUNT(*)
                 FROM donations
                 WHERE status = 'Available'
-                  AND expiry BETWEEN ? AND ?
+                  AND expiry BETWEEN %s AND %s
             """, (
                 today.isoformat(),
                 tomorrow.isoformat()
@@ -1091,7 +1047,7 @@ def donate():
                     image,
                     status
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 user["id"],
                 food_name,
@@ -1135,7 +1091,7 @@ def food_listings():
             UPDATE donations
             SET status = 'Expired'
             WHERE status = 'Available'
-              AND expiry < ?
+              AND expiry < %s
         """, (today.isoformat(),))
 
         query = """
@@ -1153,7 +1109,7 @@ def food_listings():
 
         if user["role"] == "donor":
 
-            query += " AND donations.donor_id = ?"
+            query += " AND donations.donor_id = %s"
             params.append(user["id"])
 
         elif user["role"] == "admin":
@@ -1172,7 +1128,7 @@ def food_listings():
                     )
                     AND (
                         donations.status IN ('Available', 'Expired')
-                        OR donations.claimed_by = ?
+                        OR donations.claimed_by = %s
                     )
                 )
             """
@@ -1180,15 +1136,15 @@ def food_listings():
             params.append(user["id"])
 
         if search:
-            query += " AND donations.food_name LIKE ?"
+            query += " AND donations.food_name LIKE %s"
             params.append(f"%{search}%")
 
         if category:
-            query += " AND donations.category = ?"
+            query += " AND donations.category = %s"
             params.append(category)
 
         if location:
-            query += " AND donations.location LIKE ?"
+            query += " AND donations.location LIKE %s"
             params.append(f"%{location}%")
 
         query += " ORDER BY donations.created_at DESC"
@@ -1268,7 +1224,7 @@ def claim_food(donation_id):
                 users.email AS donor_email
             FROM donations
             JOIN users ON donations.donor_id = users.id
-            WHERE donations.id = ?
+            WHERE donations.id = %s
         """, (donation_id,)).fetchone()
 
         if not donation or donation["status"] != "Available":
@@ -1288,7 +1244,7 @@ def claim_food(donation_id):
             conn.execute("""
                 UPDATE donations
                 SET status = 'Expired'
-                WHERE id = ?
+                WHERE id = %s
                   AND status = 'Available'
             """, (donation_id,))
 
@@ -1298,8 +1254,8 @@ def claim_food(donation_id):
         conn.execute("""
             UPDATE donations
             SET status = 'Claimed',
-                claimed_by = ?
-            WHERE id = ?
+                claimed_by = %s
+            WHERE id = %s
               AND status = 'Available'
         """, (user["id"], donation_id))
 
@@ -1406,7 +1362,7 @@ def delete_donation(donation_id):
         donation = conn.execute("""
             SELECT *
             FROM donations
-            WHERE id = ? AND donor_id = ?
+            WHERE id = %s AND donor_id = %s
         """, (donation_id, user["id"])).fetchone()
 
         if not donation:
@@ -1418,7 +1374,7 @@ def delete_donation(donation_id):
         else:
             conn.execute("""
                 DELETE FROM donations
-                WHERE id = ? AND donor_id = ?
+                WHERE id = %s AND donor_id = %s
             """, (donation_id, user["id"]))
 
             flash("Food donation deleted successfully!", "success")
@@ -1447,7 +1403,7 @@ def unclaim_food(donation_id):
         donation = conn.execute("""
             SELECT *
             FROM donations
-            WHERE id = ?
+            WHERE id = %s
         """, (donation_id,)).fetchone()
 
         if not donation:
@@ -1465,7 +1421,7 @@ def unclaim_food(donation_id):
                 UPDATE donations
                 SET status = 'Available',
                     claimed_by = NULL
-                WHERE id = ?
+                WHERE id = %s
             """, (donation_id,))
 
             donor_id = donation["donor_id"]
@@ -1506,7 +1462,7 @@ def donation_history():
                     ON donations.donor_id = donor.id
                 LEFT JOIN users AS recipient
                     ON donations.claimed_by = recipient.id
-                WHERE donations.donor_id = ?
+                WHERE donations.donor_id = %s
                 ORDER BY donations.created_at DESC
             """, (user["id"],)).fetchall()
 
@@ -1521,7 +1477,7 @@ def donation_history():
                     ON donations.donor_id = donor.id
                 LEFT JOIN users AS recipient
                     ON donations.claimed_by = recipient.id
-                WHERE donations.claimed_by = ?
+                WHERE donations.claimed_by = %s
                 ORDER BY donations.created_at DESC
             """, (user["id"],)).fetchall()
 
@@ -1552,8 +1508,8 @@ def download_certificate(donation_id):
                 users.name AS donor_name
             FROM donations
             JOIN users ON donations.donor_id = users.id
-            WHERE donations.id = ?
-              AND donations.donor_id = ?
+            WHERE donations.id = %s
+              AND donations.donor_id = %s
               AND donations.status = 'Claimed'
         """, (donation_id, user["id"])).fetchone()
 
@@ -1571,7 +1527,7 @@ def download_certificate(donation_id):
         conn = get_db()
 
         conn.execute(
-            "UPDATE donations SET verification_id = ? WHERE id = ?",
+            "UPDATE donations SET verification_id = %s WHERE id = %s",
             (verification_id, donation_id)
         )
 
@@ -1763,14 +1719,14 @@ def notifications():
         user_notifications = conn.execute("""
             SELECT *
             FROM notifications
-            WHERE user_id = ?
+            WHERE user_id = %s
             ORDER BY created_at DESC
         """, (user["id"],)).fetchall()
 
         conn.execute("""
             UPDATE notifications
             SET is_read = 1
-            WHERE user_id = ?
+            WHERE user_id = %s
         """, (user["id"],))
 
     return render_template(
@@ -1789,7 +1745,7 @@ def pickup_details(donation_id):
 
     with get_db() as conn:
         donation = conn.execute(
-            "SELECT * FROM donations WHERE id = ?",
+            "SELECT * FROM donations WHERE id = %s",
             (donation_id,)
         ).fetchone()
 
@@ -1810,8 +1766,8 @@ def pickup_details(donation_id):
 
                 conn.execute("""
                     UPDATE donations
-                    SET pickup_instructions = ?
-                    WHERE id = ? AND donor_id = ?
+                    SET pickup_instructions = %s
+                    WHERE id = %s AND donor_id = %s
                 """, (instructions, donation_id, user["id"]))
 
                 if donation["claimed_by"]:
@@ -1842,8 +1798,8 @@ def pickup_details(donation_id):
                     conn.execute("""
                         UPDATE donations
                         SET status = 'Completed'
-                        WHERE id = ?
-                        AND claimed_by = ?
+                        WHERE id = %s
+                        AND claimed_by = %s
                         AND status = 'Claimed'
                     """, (donation_id, user["id"]))
 
@@ -1866,7 +1822,7 @@ def pickup_details(donation_id):
             return redirect(url_for("food_listings"))
 
         donation = conn.execute(
-            "SELECT * FROM donations WHERE id = ?",
+            "SELECT * FROM donations WHERE id = %s",
             (donation_id,)
         ).fetchone()
 
@@ -1887,7 +1843,7 @@ def verify_certificate(verification_id):
             users.name AS donor_name
         FROM donations
         JOIN users ON donations.donor_id = users.id
-        WHERE donations.verification_id = ?
+        WHERE donations.verification_id = %s
     """, (verification_id,)).fetchone()
 
     conn.close()
@@ -1916,6 +1872,8 @@ def logout():
 
     return redirect(url_for("home"))
 
+
+create_database()
 
 if __name__ == "__main__":
     app.run(debug=True)
